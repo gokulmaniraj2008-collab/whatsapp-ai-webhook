@@ -3,8 +3,6 @@ const { generateReply } = require("../lib/gemini");
 const { sendWhatsAppText } = require("../lib/whatsapp");
 
 // Keep the raw request body for Meta's HMAC signature verification.
-module.exports.config = { api: { bodyParser: false } };
-
 function readRawBody(req) {
   return new Promise((resolve, reject) => {
     const chunks = [];
@@ -108,3 +106,6 @@ module.exports = async function webhook(req, res) {
 
   return res.status(200).json({ received: true, processed: results.length, results });
 };
+
+// Vercel must not parse the body before signature verification.
+module.exports.config = { api: { bodyParser: false } };
